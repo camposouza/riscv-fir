@@ -25,8 +25,7 @@ architecture rtl of control_unit is
 
 begin
 
-    -- Branch decision
-    pc_src <= branch and zero;
+    pc_src <= branch;
 
     -- ALU control refines alu_op using the instruction function fields.
     u_alu_control : entity work.alu_control(rtl)
