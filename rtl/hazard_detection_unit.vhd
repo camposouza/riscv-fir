@@ -29,8 +29,8 @@ begin
     pc_write <= not load_use_hazard;
     if_id_write <= not load_use_hazard;
 
-    -- Branches are predicted not taken and resolved in EX. On a taken
-    -- branch, both younger instructions must be discarded.
+    -- Branches are predicted not taken and resolved in EX.
+    -- On a taken   branch, both younger instructions must be discarded.
     if_id_flush <= branch_taken;
     id_ex_flush <= load_use_hazard or branch_taken;
 end architecture;
