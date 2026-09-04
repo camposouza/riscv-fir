@@ -5,15 +5,15 @@ use work.riscv_debug_types.all;
 
 entity register_file is
     port (
-	     clk        : in  std_logic;
+	      clk        : in  std_logic;
 		  write_en   : in  std_logic;
-		  
+
 		  rs1_addr   : in  std_logic_vector(4 downto 0);
 		  rs2_addr   : in  std_logic_vector(4 downto 0);
 		  rd_addr    : in  std_logic_vector(4 downto 0);
-		  
+
 		  write_data : in  std_logic_vector(63 downto 0);
-		  
+
 		  rs1_data   : out std_logic_vector(63 downto 0);
 		  rs2_data   : out std_logic_vector(63 downto 0)
     );
@@ -24,11 +24,16 @@ architecture rtl of register_file is
     signal registers : register_array_t := (others => (others => '0'));
 
 begin
-	 
-	 -- Asynchronous reading
-    rs1_data <= registers(to_integer(unsigned(rs1_addr)));
-    rs2_data <= registers(to_integer(unsigned(rs2_addr)));
-	 
+
+    -- Asynchronous reading with write-first bypass:
+	-- an instruction in ID sees a value being written back in the same cycle
+    rs1_data <= write_data
+                when write_en = '1' and rd_addr /= "00000" and rd_addr = rs1_addr
+                else registers(to_integer(unsigned(rs1_addr)));
+    rs2_data <= write_data
+                when write_en = '1' and rd_addr /= "00000" and rd_addr = rs2_addr
+                else registers(to_integer(unsigned(rs2_addr)));
+
 	 -- Synchronous writing
     process(clk)
     begin
