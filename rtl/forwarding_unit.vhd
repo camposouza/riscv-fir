@@ -2,7 +2,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 -- Selects the two ALU forwarding multiplexers used in the EX stage.
--- 00: ID/EX register value; 10: EX/MEM ALU result; 01: MEM/WB write-back.
+-- 00: ID/EX register value
+-- 10: EX/MEM ALU result
+-- 01: MEM/WB write-back
 entity forwarding_unit is
     port (
         ex_mem_reg_write  : in  std_logic;
@@ -26,8 +28,7 @@ begin
         forward_a <= "00";
         forward_b <= "00";
 
-        -- A load in EX/MEM cannot be forwarded to EX: its data becomes
-        -- available only at MEM/WB after the HDU's one-cycle load-use stall.
+        -- A load in EX/MEM cannot be forwarded to EX
         if ex_mem_reg_write = '1' and ex_mem_mem_to_reg = '0' and
            ex_mem_rd_addr /= "00000" then
             if ex_mem_rd_addr = id_ex_rs1_addr then
@@ -38,7 +39,7 @@ begin
             end if;
         end if;
 
-        -- EX/MEM has priority over MEM/WB when both write the same register.
+        -- EX/MEM has priority over MEM/WB when both write the same register
         if mem_wb_reg_write = '1' and mem_wb_rd_addr /= "00000" then
             if mem_wb_rd_addr = id_ex_rs1_addr and
                not (ex_mem_reg_write = '1' and ex_mem_mem_to_reg = '0' and
