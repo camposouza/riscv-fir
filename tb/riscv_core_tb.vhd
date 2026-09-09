@@ -82,7 +82,7 @@ begin
 
         -- 26 ROM entries, two load-use stalls and three branch flushes fit
         -- comfortably in this interval. The trailing NOPs cannot alter state.
-        for cycle in 1 to 45 loop
+        for cycle in 1 to 50 loop
             wait until rising_edge(clk);
         end loop;
         wait for 1 ns;
