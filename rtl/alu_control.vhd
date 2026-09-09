@@ -33,12 +33,14 @@ begin
 
                 case funct3 is
 
-                    -- ADD / SUB
+                    -- ADD / SUB / MUL
                     when "000" =>
                         if funct7 = "0000000" then
                             alu_control <= "0010"; -- ADD
                         elsif funct7 = "0100000" then
                             alu_control <= "0110"; -- SUB
+                        elsif funct7 = "0000001" then
+                            alu_control <= "1000"; -- MUL
                         else
                             alu_control <= "0000";
                         end if;
