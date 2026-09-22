@@ -9,6 +9,7 @@ entity control_unit is
         funct7      : in  std_logic_vector(6 downto 0);
         
         pc_src      : out std_logic;
+        branch_ne   : out std_logic;
         mem_read    : out std_logic;
         mem_to_reg  : out std_logic;
         mem_write   : out std_logic;
@@ -36,11 +37,12 @@ begin
             alu_control => alu_control
         );
 
-    process(opcode)
+    process(opcode, funct3)
     begin
 
         -- Default values
         branch     <= '0';
+        branch_ne  <= '0';
         mem_read   <= '0';
         mem_to_reg <= '0';
         alu_op     <= "00";
@@ -70,10 +72,11 @@ begin
                 alu_op     <= "00";
                 alu_src    <= '1';
 
-            -- beq
+            -- beq / bne (funct3 selects the condition; both use SUB)
             when "1100011" =>
-                branch <= '1';
-                alu_op <= "01";
+                branch    <= '1';
+                branch_ne <= funct3(0);
+                alu_op    <= "01";
 
             -- R-type (add, sub, and, or)
             when "0110011" =>

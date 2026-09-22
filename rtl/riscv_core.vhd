@@ -12,6 +12,7 @@ architecture rtl of riscv_core is
     signal instruction        : std_logic_vector(31 downto 0);
     signal zero               : std_logic;
     signal pc_src             : std_logic;
+    signal branch_ne          : std_logic;
     signal mem_read           : std_logic;
     signal mem_to_reg         : std_logic;
     signal mem_write          : std_logic;
@@ -33,6 +34,7 @@ begin
             clk         => clk,
             reset       => reset,
             pc_src      => pc_src,
+            branch_ne   => branch_ne,
             mem_read    => mem_read,
             mem_to_reg  => mem_to_reg,
             mem_write   => mem_write,
@@ -66,6 +68,7 @@ begin
             opcode     => instruction(6 downto 0),
             zero       => zero,
             pc_src     => pc_src,
+            branch_ne  => branch_ne,
             mem_read   => mem_read,
             mem_to_reg => mem_to_reg,
             funct3     => instruction(14 downto 12),

@@ -7,9 +7,11 @@ entity datapath is
         clk        : in  std_logic;
         reset      : in  std_logic;
 
-        -- Decoded in ID.  pc_src is the Branch control bit; the datapath
-        -- combines it with the EX zero flag when selecting the next PC.
+        -- Decoded in ID.  pc_src is the Branch control bit; branch_ne
+        -- distinguishes bne ('1') from beq ('0').  The datapath combines
+        -- them with the EX zero flag when selecting the next PC.
         pc_src      : in  std_logic;
+        branch_ne   : in  std_logic;
         mem_read    : in  std_logic;
         mem_to_reg  : in  std_logic;
         mem_write   : in  std_logic;
@@ -59,7 +61,7 @@ architecture structural of datapath is
     signal immediate_id, read_data_1_id, read_data_2_id : std_logic_vector(63 downto 0);
 
     -- ID/EX signals
-    signal id_ex_mem_to_reg, id_ex_reg_write, id_ex_branch : std_logic;
+    signal id_ex_mem_to_reg, id_ex_reg_write, id_ex_branch, id_ex_branch_ne : std_logic;
     signal id_ex_mem_read, id_ex_mem_write, id_ex_alu_src : std_logic;
     signal id_ex_alu_control : std_logic_vector(3 downto 0);
     signal id_ex_pc_plus_4, id_ex_read_data_1, id_ex_read_data_2, id_ex_immediate : std_logic_vector(63 downto 0);
@@ -105,7 +107,8 @@ begin
             result => pc_plus_4
         );
 
-    branch_taken <= id_ex_branch and alu_zero_ex;
+    -- beq wants taken on zero='1'; bne (branch_ne='1') wants taken on zero='0'.
+    branch_taken <= id_ex_branch and (id_ex_branch_ne xor alu_zero_ex);
     u_next_pc_mux : entity work.mux2(rtl)
         port map (
             input0 => pc_plus_4,
@@ -154,6 +157,7 @@ begin
             mem_to_reg_i => mem_to_reg,
             reg_write_i => reg_write,
             branch_i => pc_src,
+            branch_ne_i => branch_ne,
             mem_read_i => mem_read,
             mem_write_i => mem_write,
             alu_src_i => alu_src,
@@ -168,6 +172,7 @@ begin
             mem_to_reg_o => id_ex_mem_to_reg,
             reg_write_o => id_ex_reg_write,
             branch_o => id_ex_branch,
+            branch_ne_o => id_ex_branch_ne,
             mem_read_o => id_ex_mem_read,
             mem_write_o => id_ex_mem_write,
             alu_src_o => id_ex_alu_src,

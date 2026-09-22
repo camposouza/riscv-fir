@@ -12,6 +12,7 @@ entity id_ex_register is
         reg_write_i    : in  std_logic;
         -- M control
         branch_i       : in  std_logic;
+        branch_ne_i    : in  std_logic;
         mem_read_i     : in  std_logic;
         mem_write_i    : in  std_logic;
         -- EX control
@@ -29,6 +30,7 @@ entity id_ex_register is
         mem_to_reg_o   : out std_logic;
         reg_write_o    : out std_logic;
         branch_o       : out std_logic;
+        branch_ne_o    : out std_logic;
         mem_read_o     : out std_logic;
         mem_write_o    : out std_logic;
         alu_src_o      : out std_logic;
@@ -44,7 +46,7 @@ entity id_ex_register is
 end entity;
 
 architecture rtl of id_ex_register is
-    signal control_reg : std_logic_vector(9 downto 0) := (others => '0');
+    signal control_reg : std_logic_vector(10 downto 0) := (others => '0');
     signal pc_plus_4_reg, read_data_1_reg, read_data_2_reg, immediate_reg : std_logic_vector(63 downto 0) := (others => '0');
     signal rs1_addr_reg, rs2_addr_reg, rd_addr_reg : std_logic_vector(4 downto 0) := (others => '0');
 begin
@@ -61,7 +63,7 @@ begin
                 rs2_addr_reg <= (others => '0');
                 rd_addr_reg <= (others => '0');
             else
-                control_reg <= mem_to_reg_i & reg_write_i & branch_i & mem_read_i & mem_write_i & alu_src_i & alu_control_i;
+                control_reg <= mem_to_reg_i & reg_write_i & branch_i & branch_ne_i & mem_read_i & mem_write_i & alu_src_i & alu_control_i;
                 pc_plus_4_reg <= pc_plus_4_i;
                 read_data_1_reg <= read_data_1_i;
                 read_data_2_reg <= read_data_2_i;
@@ -73,9 +75,10 @@ begin
         end if;
     end process;
 
-    mem_to_reg_o <= control_reg(9);
-    reg_write_o <= control_reg(8);
-    branch_o <= control_reg(7);
+    mem_to_reg_o <= control_reg(10);
+    reg_write_o <= control_reg(9);
+    branch_o <= control_reg(8);
+    branch_ne_o <= control_reg(7);
     mem_read_o <= control_reg(6);
     mem_write_o <= control_reg(5);
     alu_src_o <= control_reg(4);
