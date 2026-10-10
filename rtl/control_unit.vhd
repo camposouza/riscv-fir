@@ -7,7 +7,7 @@ entity control_unit is
         zero        : in  std_logic;
         funct3      : in  std_logic_vector(2 downto 0);
         funct7      : in  std_logic_vector(6 downto 0);
-        
+
         pc_src      : out std_logic;
         branch_ne   : out std_logic;
         mem_read    : out std_logic;
@@ -15,6 +15,7 @@ entity control_unit is
         mem_write   : out std_logic;
         alu_src     : out std_logic;
         reg_write   : out std_logic;
+        macdm       : out std_logic;
         alu_control : out std_logic_vector(3 downto 0)
     );
 end entity;
@@ -49,6 +50,7 @@ begin
         mem_write  <= '0';
         alu_src    <= '0';
         reg_write  <= '0';
+        macdm      <= '0';
 
         case opcode is
 
@@ -72,7 +74,7 @@ begin
                 alu_op     <= "00";
                 alu_src    <= '1';
 
-            -- beq / bne (funct3 selects the condition; both use SUB)
+            -- beq / bne
             when "1100011" =>
                 branch    <= '1';
                 branch_ne <= funct3(0);
@@ -82,6 +84,15 @@ begin
             when "0110011" =>
                 alu_op    <= "10";
                 reg_write <= '1';
+
+            -- macdm
+            when "0001011" =>
+                mem_read   <= '1';
+                mem_write  <= '1';
+                alu_op     <= "00";
+                alu_src    <= '1';
+                reg_write  <= '1';
+                macdm      <= '1';
 
             when others =>
                 null;

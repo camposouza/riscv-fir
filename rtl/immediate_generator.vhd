@@ -56,6 +56,15 @@ begin
                     )
                 );
 
+            -- macdm: funct7 is an unsigned word offset
+            when "0001011" =>
+                immediate <= std_logic_vector(
+                    resize(
+                        unsigned(instruction(31 downto 25) & "000"),
+                        64
+                    )
+                );
+
             when others =>
                 immediate <= (others => '0');
 					 

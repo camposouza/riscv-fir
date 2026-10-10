@@ -10,12 +10,14 @@ entity register_file is
 
 		  rs1_addr   : in  std_logic_vector(4 downto 0);
 		  rs2_addr   : in  std_logic_vector(4 downto 0);
+		  rs3_addr   : in  std_logic_vector(4 downto 0);
 		  rd_addr    : in  std_logic_vector(4 downto 0);
 
 		  write_data : in  std_logic_vector(63 downto 0);
 
 		  rs1_data   : out std_logic_vector(63 downto 0);
-		  rs2_data   : out std_logic_vector(63 downto 0)
+		  rs2_data   : out std_logic_vector(63 downto 0);
+		  rs3_data   : out std_logic_vector(63 downto 0)
     );
 end entity;
 
@@ -33,6 +35,9 @@ begin
     rs2_data <= write_data
                 when write_en = '1' and rd_addr /= "00000" and rd_addr = rs2_addr
                 else registers(to_integer(unsigned(rs2_addr)));
+    rs3_data <= write_data
+                when write_en = '1' and rd_addr /= "00000" and rd_addr = rs3_addr
+                else registers(to_integer(unsigned(rs3_addr)));
 
 	 -- Synchronous writing
     process(clk)

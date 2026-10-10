@@ -18,13 +18,15 @@ architecture rtl of riscv_core is
     signal mem_write          : std_logic;
     signal alu_src            : std_logic;
     signal reg_write          : std_logic;
+    signal macdm              : std_logic;
     signal alu_control_signal : std_logic_vector(3 downto 0);
     signal pc_write, if_id_write, if_id_flush, id_ex_flush : std_logic;
     signal forward_a, forward_b : std_logic_vector(1 downto 0);
+    signal forward_c, forward_m : std_logic;
     signal if_id_rs1_addr, if_id_rs2_addr : std_logic_vector(4 downto 0);
-    signal id_ex_mem_read : std_logic;
+    signal id_ex_mem_read, id_ex_macdm : std_logic;
     signal id_ex_rd_addr, id_ex_rs1_addr, id_ex_rs2_addr : std_logic_vector(4 downto 0);
-    signal ex_mem_reg_write, ex_mem_mem_to_reg : std_logic;
+    signal ex_mem_reg_write, ex_mem_mem_read, ex_mem_macdm : std_logic;
     signal ex_mem_rd_addr, mem_wb_rd_addr : std_logic_vector(4 downto 0);
     signal mem_wb_reg_write, branch_taken : std_logic;
 begin
@@ -40,6 +42,7 @@ begin
             mem_write   => mem_write,
             alu_src     => alu_src,
             reg_write   => reg_write,
+            macdm       => macdm,
             alu_control => alu_control_signal,
             pc_write    => pc_write,
             if_id_write => if_id_write,
@@ -47,6 +50,8 @@ begin
             id_ex_flush => id_ex_flush,
             forward_a   => forward_a,
             forward_b   => forward_b,
+            forward_c   => forward_c,
+            forward_m   => forward_m,
             instruction => instruction,
             zero        => zero,
             if_id_rs1_addr_o => if_id_rs1_addr,
@@ -55,8 +60,10 @@ begin
             id_ex_rd_addr_o => id_ex_rd_addr,
             id_ex_rs1_addr_o => id_ex_rs1_addr,
             id_ex_rs2_addr_o => id_ex_rs2_addr,
+            id_ex_macdm_o => id_ex_macdm,
             ex_mem_reg_write_o => ex_mem_reg_write,
-            ex_mem_mem_to_reg_o => ex_mem_mem_to_reg,
+            ex_mem_mem_read_o => ex_mem_mem_read,
+            ex_mem_macdm_o => ex_mem_macdm,
             ex_mem_rd_addr_o => ex_mem_rd_addr,
             mem_wb_reg_write_o => mem_wb_reg_write,
             mem_wb_rd_addr_o => mem_wb_rd_addr,
@@ -76,6 +83,7 @@ begin
             mem_write  => mem_write,
             alu_src    => alu_src,
             reg_write  => reg_write,
+            macdm      => macdm,
             alu_control => alu_control_signal
         );
 
@@ -95,13 +103,18 @@ begin
     u_forwarding_unit : entity work.forwarding_unit(rtl)
         port map (
             ex_mem_reg_write => ex_mem_reg_write,
-            ex_mem_mem_to_reg => ex_mem_mem_to_reg,
+            ex_mem_mem_read => ex_mem_mem_read,
+            ex_mem_macdm => ex_mem_macdm,
             ex_mem_rd_addr => ex_mem_rd_addr,
             mem_wb_reg_write => mem_wb_reg_write,
             mem_wb_rd_addr => mem_wb_rd_addr,
+            id_ex_macdm => id_ex_macdm,
             id_ex_rs1_addr => id_ex_rs1_addr,
             id_ex_rs2_addr => id_ex_rs2_addr,
+            id_ex_rd_addr => id_ex_rd_addr,
             forward_a => forward_a,
-            forward_b => forward_b
+            forward_b => forward_b,
+            forward_c => forward_c,
+            forward_m => forward_m
         );
 end architecture;

@@ -2,10 +2,10 @@ library ieee;
 use ieee.std_logic_1164.all;
 use work.riscv_debug_types.all;
 
-entity riscv_core_tb is
+entity base_verif_tb is
 end entity;
 
-architecture sim of riscv_core_tb is
+architecture sim of base_verif_tb is
     constant CLK_PERIOD : time := 10 ns;
 
     signal clk   : std_logic := '0';
@@ -25,10 +25,10 @@ begin
     clk <= not clk after CLK_PERIOD / 2;
 
     monitor_pipeline : process(clk)
-        alias pc_write_dbg is << signal .riscv_core_tb.dut.pc_write : std_logic >>;
-        alias if_id_write_dbg is << signal .riscv_core_tb.dut.if_id_write : std_logic >>;
-        alias id_ex_flush_dbg is << signal .riscv_core_tb.dut.id_ex_flush : std_logic >>;
-        alias branch_taken_dbg is << signal .riscv_core_tb.dut.branch_taken : std_logic >>;
+        alias pc_write_dbg is << signal .base_verif_tb.dut.pc_write : std_logic >>;
+        alias if_id_write_dbg is << signal .base_verif_tb.dut.if_id_write : std_logic >>;
+        alias id_ex_flush_dbg is << signal .base_verif_tb.dut.id_ex_flush : std_logic >>;
+        alias branch_taken_dbg is << signal .base_verif_tb.dut.branch_taken : std_logic >>;
     begin
         if rising_edge(clk) then
             if reset = '1' then
@@ -51,8 +51,8 @@ begin
 
     stimulus : process
         -- White-box aliases are used only to check the architectural state.
-        alias registers_dbg is << signal .riscv_core_tb.dut.u_datapath.u_register_file.registers : register_array_t >>;
-        alias memory_dbg is << signal .riscv_core_tb.dut.u_datapath.u_data_memory.memory : data_memory_array_t >>;
+        alias registers_dbg is << signal .base_verif_tb.dut.u_datapath.u_register_file.registers : register_array_t >>;
+        alias memory_dbg is << signal .base_verif_tb.dut.u_datapath.u_data_memory.memory : data_memory_array_t >>;
 
         alias x1  is registers_dbg(1);
         alias x2  is registers_dbg(2);
@@ -126,7 +126,7 @@ begin
             report "Expected exactly three taken branches" severity error;
 
         assert false
-            report "riscv_core_tb completed successfully"
+            report "base_verif_tb completed successfully"
             severity note;
         wait;
     end process;

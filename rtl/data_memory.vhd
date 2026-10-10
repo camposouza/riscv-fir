@@ -9,8 +9,9 @@ entity data_memory is
         mem_read    : in  std_logic;
         mem_write   : in  std_logic;
 
-        address     : in  std_logic_vector(63 downto 0);
-        write_data  : in  std_logic_vector(63 downto 0);
+        read_address  : in  std_logic_vector(63 downto 0);
+        write_address : in  std_logic_vector(63 downto 0);
+        write_data    : in  std_logic_vector(63 downto 0);
 
         read_data   : out std_logic_vector(63 downto 0)
     );
@@ -23,16 +24,17 @@ architecture rtl of data_memory is
 begin
 
     -- Asynchronous read.
-    read_data <= memory(to_integer(unsigned(address(10 downto 3))))
+    read_data <= memory(to_integer(unsigned(read_address(10 downto 3))))
                  when mem_read = '1'
                  else (others => '0');
 
-    -- Synchronous write
+    -- Synchronous write, with its own address so macdm can read one word and
+    -- write the next one in the same cycle.
     process(clk)
     begin
         if rising_edge(clk) then
             if mem_write = '1' then
-                memory(to_integer(unsigned(address(10 downto 3)))) <= write_data;
+                memory(to_integer(unsigned(write_address(10 downto 3)))) <= write_data;
             end if;
         end if;
     end process;
