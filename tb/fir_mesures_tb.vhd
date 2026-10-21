@@ -6,7 +6,7 @@
 -- Measurement window: from the last setup store (x[15] to Mem[184]) to the
 -- store of the last output (y[22] to Mem[496]), both detected on the
 -- data_memory write port. Reported: cycles, instructions, load-use stalls,
--- taken branches and CPI. Checked: the 23 outputs y[0..22].
+-- taken branches and CPI. Checked: the 23 outputs y[0-22].
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;

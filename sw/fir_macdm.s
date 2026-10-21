@@ -14,20 +14,20 @@
 #   y = {4, 19, 51, 100, 149, 191, 225, 245, 262, 285, 310, 330, 345, 351, 347, 334,
 #        307, 263, 199, 131, 73, 31, 8}
 #
-# Delay line d[0..7]: d[k] holds x[n-k] while y[n] is computed (d[0] = newest). It starts zeroed.
+# Delay line d[0-7]: d[k] holds x[n-k] while y[n] is computed (d[0] = newest). It starts zeroed.
 # Each tap is one macdm: it accumulates h[k] * d[k] and, in the same instruction,
 # stores d[k] one position ahead (d[k+1] = d[k]).
 # Taps run from the oldest (k = 7) to the newest (k = 0), so every store lands on a position
 # already consumed. d[8] is a discard slot, written by tap 7 and never read.
 #
-# After the 16 real inputs, the loop runs 7 more times feeding x[16..22] = 0
+# After the 16 real inputs, the loop runs 7 more times feeding x[16-22] = 0
 # (memory reset value, no setup store needed), which drains the delay line.
 #
 # Data memory map (8-byte words, byte addresses):
-#   h[0..7]   0 .. 56
-#   x[0..22]  64 .. 240   (x[16..22] = 0)
-#   d[0..8]   248 .. 312  (word offsets 31 .. 39)
-#   y[0..22]  320 .. 496
+#   h[0-7]   0 .. 56
+#   x[0-22]  64 .. 240   (x[16-22] = 0)
+#   d[0-8]   248 .. 312  (word offsets 31 .. 39)
+#   y[0-22]  320 .. 496
 #
 # Registers:
 #   x1        setup temporary
@@ -36,9 +36,9 @@
 #   x4        &x[23] = 248   (loop end)
 #   x5        sample
 #   x7        accumulator
-#   x10..x17  h[0..7]
+#   x10..x17  h[0-7]
 
-# ---- Setup (not measured): coefficients h[0..7] into memory ---------------
+# ---- Setup (not measured): coefficients h[0-7] into memory ---------------
 addi x1, x0, 1
 sw   x1, 0(x0)          # h[0] = 1
 addi x1, x0, 2
@@ -56,7 +56,7 @@ sw   x1, 48(x0)         # h[6] = 2
 addi x1, x0, 1
 sw   x1, 56(x0)         # h[7] = 1
 
-# ---- Setup (not measured): input samples x[0..15] into memory -------------
+# ---- Setup (not measured): input samples x[0-15] into memory -------------
 addi x1, x0, 4
 sw   x1, 64(x0)         # x[0]  = 4
 addi x1, x0, 11

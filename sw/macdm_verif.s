@@ -10,13 +10,13 @@
 # memory accesses around it. Checked by tb/macdm_verif_tb.vhd.
 #
 # Data memory map (word index = byte address / 8), initial -> final:
-#   Mem[0..2]   11, 16, 0  -> 11, 11, 11   block 1 (ascending, back-to-back)
-#   Mem[4..6]   4, 6, 0    -> 4, 6, 6      block 2
-#   Mem[8..10]  10, 0, 0   -> 10, 10, 10   blocks 3 and 4
-#   Mem[14..15] 7, 0       -> 7, 14        block 6 (sw after the move wins)
-#   Mem[16..17] 0, 0       -> 13, 13       block 7 (sw before macdm)
-#   Mem[20..23] 1, 2, 3, 0 -> 1, 1, 2, 3   block 8 (delay line shifted right)
-#   Mem[24..25] 50, 0      -> 50, 0        block 9 (flushed macdm must not move)
+#   Mem[0-2]   11, 16, 0  -> 11, 11, 11   block 1 (ascending, back-to-back)
+#   Mem[4-6]   4, 6, 0    -> 4, 6, 6      block 2
+#   Mem[8-10]  10, 0, 0   -> 10, 10, 10   blocks 3 and 4
+#   Mem[14-15] 7, 0       -> 7, 14        block 6 (sw after the move wins)
+#   Mem[16-17] 0, 0       -> 13, 13       block 7 (sw before macdm)
+#   Mem[20-23] 1, 2, 3, 0 -> 1, 1, 2, 3   block 8 (delay line shifted right)
+#   Mem[24-25] 50, 0      -> 50, 0        block 9 (flushed macdm must not move)
 
 # Setup: samples in data memory
 addi  x1,  x0, 11

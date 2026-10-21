@@ -1,5 +1,5 @@
 constant ROM : memory_t := (
-    -- Setup: coefficients h[0..7] = {1, 2, 3, 4, 4, 3, 2, 1}
+    -- Setup: coefficients h[0-7] = {1, 2, 3, 4, 4, 3, 2, 1}
     0  => x"00100093", -- addi x1, x0, 1
     1  => x"00102023", -- sw   x1, 0(x0)        h[0]
     2  => x"00200093", -- addi x1, x0, 2
@@ -17,7 +17,7 @@ constant ROM : memory_t := (
     14 => x"00100093", -- addi x1, x0, 1
     15 => x"02102C23", -- sw   x1, 56(x0)       h[7]
 
-    -- Setup: input samples x[0..15]
+    -- Setup: input samples x[0-15]
     16 => x"00400093", -- addi x1, x0, 4
     17 => x"04102023", -- sw   x1, 64(x0)       x[0]
     18 => x"00B00093", -- addi x1, x0, 11
