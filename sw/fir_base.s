@@ -112,50 +112,50 @@ sw   x5, 248(x0)        # d[0] = x[n]
 
 # tap 7: acc += h[7] * d[7];  d[8] = d[7]
 lw   x5, 304(x0)        # d[7]
-mul  x6, x17, x5        # load-use stall
-add  x7, x7, x6         # x6 forwarded EX/MEM -> EX
+mul  x6, x17, x5        # h[7] * d[7]
+add  x7, x7, x6         # acc +=
 sw   x5, 312(x0)        # d[8] = d[7]
 
 # tap 6: acc += h[6] * d[6];  d[7] = d[6]
 lw   x5, 296(x0)        # d[6]
-mul  x6, x16, x5        # load-use stall
-add  x7, x7, x6
+mul  x6, x16, x5        # h[6] * d[6]
+add  x7, x7, x6         # acc +=
 sw   x5, 304(x0)        # d[7] = d[6]
 
 # tap 5: acc += h[5] * d[5];  d[6] = d[5]
 lw   x5, 288(x0)        # d[5]
-mul  x6, x15, x5        # load-use stall
-add  x7, x7, x6
+mul  x6, x15, x5        # h[5] * d[5]
+add  x7, x7, x6         # acc +=
 sw   x5, 296(x0)        # d[6] = d[5]
 
 # tap 4: acc += h[4] * d[4];  d[5] = d[4]
 lw   x5, 280(x0)        # d[4]
-mul  x6, x14, x5        # load-use stall
-add  x7, x7, x6
+mul  x6, x14, x5        # h[4] * d[4]
+add  x7, x7, x6         # acc +=
 sw   x5, 288(x0)        # d[5] = d[4]
 
 # tap 3: acc += h[3] * d[3];  d[4] = d[3]
 lw   x5, 272(x0)        # d[3]
-mul  x6, x13, x5        # load-use stall
-add  x7, x7, x6
+mul  x6, x13, x5        # h[3] * d[3]
+add  x7, x7, x6         # acc +=
 sw   x5, 280(x0)        # d[4] = d[3]
 
 # tap 2: acc += h[2] * d[2];  d[3] = d[2]
 lw   x5, 264(x0)        # d[2]
-mul  x6, x12, x5        # load-use stall
-add  x7, x7, x6
+mul  x6, x12, x5        # h[2] * d[2]
+add  x7, x7, x6         # acc +=
 sw   x5, 272(x0)        # d[3] = d[2]
 
 # tap 1: acc += h[1] * d[1];  d[2] = d[1]
 lw   x5, 256(x0)        # d[1]
-mul  x6, x11, x5        # load-use stall
-add  x7, x7, x6
+mul  x6, x11, x5        # h[1] * d[1]
+add  x7, x7, x6         # acc +=
 sw   x5, 264(x0)        # d[2] = d[1]
 
 # tap 0: acc += h[0] * d[0];  d[1] = d[0]
 lw   x5, 248(x0)        # d[0]
-mul  x6, x10, x5        # load-use stall
-add  x7, x7, x6
+mul  x6, x10, x5        # h[0] * d[0]
+add  x7, x7, x6         # acc +=
 sw   x5, 256(x0)        # d[1] = d[0]
 
 sw   x7, 0(x3)          # y[n] = acc
